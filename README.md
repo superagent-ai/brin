@@ -21,9 +21,9 @@
 
 ---
 
-every time an ai agent pulls in a package, repo, skill, or web page, it trusts that context blindly. brin scores each one - detecting malware, prompt injection, and supply chain attacks before your agent acts.
+ai agents are only as safe as the context they consume. brin scores each piece before your agent acts, detecting malware, prompt injection, phishing, and supply chain attacks across packages, repos, mcp servers, skills, and urls.
 
-this repo contains the **brin dataset** - open source threat scan records produced by brin's scoring pipeline, covering packages, domains, repositories, agent skills, mcp servers, and commits. free to use for research, red-teaming, and model training.
+this dataset contains open-source threat scan records from brin's scoring pipeline. free for research, red-teaming, and model training.
 
 ---
 
