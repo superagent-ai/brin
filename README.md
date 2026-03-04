@@ -21,9 +21,9 @@
 
 ---
 
-every time an ai agent pulls in a package, repo, skill, or web page, it trusts that context blindly. brin scores each one — detecting malware, prompt injection, and supply chain attacks before your agent acts.
+every time an ai agent pulls in a package, repo, skill, or web page, it trusts that context blindly. brin scores each one - detecting malware, prompt injection, and supply chain attacks before your agent acts.
 
-this repo contains the **brin dataset** — open source threat scan records produced by brin's scoring pipeline, covering packages, domains, repositories, agent skills, mcp servers, and commits. free to use for research, red-teaming, and model training.
+this repo contains the **brin dataset** - open source threat scan records produced by brin's scoring pipeline, covering packages, domains, repositories, agent skills, mcp servers, and commits. free to use for research, red-teaming, and model training.
 
 ---
 
@@ -90,7 +90,7 @@ each record is a single brin scan result. the fields are:
 
 ## format
 
-records are stored as **jsonl** (newline-delimited json) — one record per line. this makes the dataset trivially streamable and parseable without loading everything into memory.
+records are stored as **jsonl** (newline-delimited json) - one record per line. this makes the dataset trivially streamable and parseable without loading everything into memory.
 
 files are organized by origin under `data/`:
 
@@ -122,5 +122,5 @@ MIT
 ---
 
 <p align="center">
-  <sub>built by <a href="https://superagent.sh">superagent</a> — ai security for the agentic era</sub>
+  <sub>built by <a href="https://superagent.sh">superagent</a> - ai security for the agentic era</sub>
 </p>
