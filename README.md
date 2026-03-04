@@ -33,14 +33,14 @@ each record is a single brin scan result. the fields are:
 
 | field | type | description |
 |-------|------|-------------|
-| `origin` | string | source type: `npm`, `pypi`, `crate`, `domain`, `page`, `repo`, `skill`, `mcp`, `commit` |
-| `name` | string | identifier within the origin (e.g. `express`, `example.com`) |
-| `version` | string | version or ref, if applicable |
+| `origin` | string | source type: `npm`, `pypi`, `crate`, `domain`, `page`, `repo`, `skill`, `mcp` |
+| `identifier` | string | identifier within the origin (e.g. `express`, `example.com`) |
+| `version` | string | version or ref (optional) |
 | `score` | integer | 0–100 safety score. higher is safer |
 | `confidence` | string | `low`, `medium`, or `high` |
-| `verdict` | string | `safe`, `suspicious`, or `malicious` |
+| `verdict` | string | `safe`, `caution`, `suspicious`, or `malicious` |
 | `sub_scores` | object | breakdown across four dimensions (see below) |
-| `threats` | array | list of detected threat signals with type and description |
+| `threats` | array | detected threat signals with type and description (optional, omitted if none) |
 | `scanned_at` | string | ISO 8601 timestamp of when the scan was run |
 
 ### sub_scores
@@ -57,7 +57,7 @@ each record is a single brin scan result. the fields are:
 ```json
 {
   "origin": "npm",
-  "name": "express",
+  "identifier": "express",
   "version": "4.18.2",
   "score": 81,
   "confidence": "medium",
@@ -68,7 +68,6 @@ each record is a single brin scan result. the fields are:
     "content": 100.0,
     "graph": 30.0
   },
-  "threats": [],
   "scanned_at": "2026-02-25T09:00:00Z"
 }
 ```
@@ -84,7 +83,6 @@ each record is a single brin scan result. the fields are:
 | `repo` | github repositories | agent config injection, malicious commits, compromised dependencies |
 | `skill` | agent skills | description injection, output poisoning, instruction override |
 | `mcp` | mcp servers | tool shadowing, schema abuse, silent capability escalation |
-| `commit` | individual commits | pr injection, security sabotage, backdoor introduction |
 
 ---
 
@@ -104,7 +102,6 @@ data/
   repo.jsonl
   skill.jsonl
   mcp.jsonl
-  commit.jsonl
 ```
 
 ---
