@@ -25,7 +25,7 @@ ai agents are only as safe as the context they consume. brin scores each piece b
 
 this dataset contains open-source threat scan records from brin's scoring pipeline. free for research, red-teaming, and model training.
 
-- **docs:** [brin.sh](https://brin.sh)
+- **docs:** [brin.sh/docs](https://brin.sh/docs)
 - **cli:** [brin-cli](https://github.com/superagent-ai/brin-cli)
 
 ---
