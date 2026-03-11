@@ -33,7 +33,7 @@ each record is a single brin scan result. the fields are:
 
 | field | type | description |
 |-------|------|-------------|
-| `origin` | string | source type: `npm`, `pypi`, `crate`, `domain`, `page`, `repo`, `skill`, `mcp`, `contributor`, `email` |
+| `origin` | string | source type: `npm`, `pypi`, `crate`, `domain`, `page`, `repo`, `skill`, `mcp`, `contributor` |
 | `identifier` | string | identifier within the origin (e.g. `express`, `example.com`) |
 | `version` | string | version or ref (optional) |
 | `score` | integer | 0–100 safety score. higher is safer |
@@ -84,7 +84,6 @@ each record is a single brin scan result. the fields are:
 | `skill` | agent skills | description injection, output poisoning, instruction override |
 | `mcp` | mcp servers | tool shadowing, schema abuse, silent capability escalation |
 | `contributor` | github contributors | impersonation, typosquatting, suspicious commit patterns |
-| `email` | email addresses | spoofing, phishing domains, reputation signals |
 
 ---
 
@@ -105,7 +104,6 @@ data/
   skill.jsonl
   mcp.jsonl
   contributor.jsonl
-  email.jsonl
 ```
 
 ---
