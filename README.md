@@ -25,6 +25,9 @@ ai agents are only as safe as the context they consume. brin scores each piece b
 
 this dataset contains open-source threat scan records from brin's scoring pipeline. free for research, red-teaming, and model training.
 
+- **docs:** [brin.sh/docs](https://brin.sh/docs)
+- **cli:** [brin-cli](https://github.com/superagent-ai/brin-cli)
+
 ---
 
 ## schema
@@ -33,7 +36,7 @@ each record is a single brin scan result. the fields are:
 
 | field | type | description |
 |-------|------|-------------|
-| `origin` | string | source type: `npm`, `pypi`, `crate`, `domain`, `page`, `repo`, `skill`, `mcp` |
+| `origin` | string | source type: `npm`, `pypi`, `crate`, `domain`, `page`, `repo`, `skill`, `mcp`, `contributor` |
 | `identifier` | string | identifier within the origin (e.g. `express`, `example.com`) |
 | `version` | string | version or ref (optional) |
 | `score` | integer | 0–100 safety score. higher is safer |
@@ -83,6 +86,7 @@ each record is a single brin scan result. the fields are:
 | `repo` | github repositories | agent config injection, malicious commits, compromised dependencies |
 | `skill` | agent skills | description injection, output poisoning, instruction override |
 | `mcp` | mcp servers | tool shadowing, schema abuse, silent capability escalation |
+| `contributor` | github contributors | impersonation, typosquatting, suspicious commit patterns |
 
 ---
 
@@ -102,6 +106,7 @@ data/
   repo.jsonl
   skill.jsonl
   mcp.jsonl
+  contributor.jsonl
 ```
 
 ---
