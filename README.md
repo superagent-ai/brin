@@ -38,9 +38,11 @@ this repo includes a [cursor plugin](https://cursor.com/docs/reference/plugins) 
 ### what it does
 
 - **pre-install hook** — automatically scans packages before `npm install`, `pip install`, `cargo add`, and other package manager commands. blocks `suspicious` or `malicious` packages and warns on `caution` verdicts.
-- **brin-check skill** — invoke with `/brin-check` in agent chat to scan any package, repo, MCP server, domain, or skill on demand.
-- **brin-scan command** — invoke with `/brin-scan <resource>` for a quick security check (e.g. `/brin-scan express`, `/brin-scan pypi:requests`).
-- **security rules** — teaches the AI agent to always consider brin scores when suggesting dependencies or external resources.
+- **url/domain hook** — automatically scans domains before `curl`, `wget`, and other HTTP commands to catch malicious URLs, prompt injection, and phishing.
+- **web search hook** — scans domains returned by web search results after each search, warning about dangerous or suspicious sites.
+- **brin-check skill** — invoke with `/brin-check` in agent chat to scan any package, repo, MCP server, domain, web page, or skill on demand.
+- **brin-scan command** — invoke with `/brin-scan <resource>` for a quick security check (e.g. `/brin-scan express`, `/brin-scan domain:example.com`).
+- **security rules** — teaches the AI agent to always consider brin scores when suggesting dependencies, visiting URLs, or integrating external resources.
 
 ### install
 
@@ -50,18 +52,20 @@ install the plugin from the cursor marketplace, or add it manually:
 2. copy the plugin files into your project:
 
 ```
-.cursor-plugin/plugin.json   # plugin manifest
-hooks/hooks.json              # hook configuration
-scripts/brin-check.sh         # pre-install check script
+.cursor-plugin/plugin.json    # plugin manifest
+hooks/hooks.json               # hook configuration
+scripts/brin-check.sh          # pre-install security check
+scripts/brin-url-check.sh     # url/domain security check
+scripts/brin-web-check.sh     # web search result scanning
 rules/brin-security.mdc       # AI agent security rules
 skills/brin-check/SKILL.md    # brin scanning skill
-commands/brin-scan.md         # brin scan command
+commands/brin-scan.md          # brin scan command
 ```
 
-3. make the hook script executable:
+3. make the hook scripts executable:
 
 ```bash
-chmod +x scripts/brin-check.sh
+chmod +x scripts/brin-check.sh scripts/brin-url-check.sh scripts/brin-web-check.sh
 ```
 
 4. restart cursor to load the plugin.
@@ -79,12 +83,23 @@ chmod +x scripts/brin-check.sh
 | gem | `gem install` |
 | go | `go get`, `go install` |
 
+### web and url scanning
+
+the plugin also protects against malicious web content:
+
+| hook | trigger | what it does |
+|------|---------|--------------|
+| url check | `curl`, `wget`, `http`, `fetch` | scans domains before HTTP requests are made |
+| web search | after any `web_search` tool use | scans domains from search results for threats |
+
+brin detects prompt injection, phishing, cloaking, credential harvesting, and exfiltration hidden in web pages.
+
 ### usage
 
-the pre-install hook runs automatically. for manual scans, use:
+the hooks run automatically. for manual scans, use:
 
 - `/brin-check` — full security analysis with sub-scores and threat details
-- `/brin-scan <resource>` — quick scan of a specific resource
+- `/brin-scan <resource>` — quick scan of a specific resource (packages, domains, URLs, repos, etc.)
 
 ---
 
