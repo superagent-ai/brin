@@ -1,0 +1,71 @@
+---
+description: Security rules for scanning external dependencies via the brin API before installing or using them.
+globs: ["*"]
+---
+
+# brin Security Rules
+
+Before installing any package, dependency, or external resource, check it against the brin API for known threats.
+
+## When to Check
+
+- Before running any package install command (npm, pip, cargo, yarn, pnpm, bun, gem, go get)
+- Before adding a new MCP server
+- Before using a new agent skill from an external source
+- Before fetching content from untrusted URLs or domains
+
+## How to Check
+
+Make a GET request to the brin API. No authentication is required.
+
+### Endpoints
+
+| Type | Endpoint |
+|------|----------|
+| npm packages | `https://api.brin.sh/npm/<package>` |
+| PyPI packages | `https://api.brin.sh/pypi/<package>` |
+| Rust crates | `https://api.brin.sh/crate/<package>` |
+| Domains | `https://api.brin.sh/domain/<domain>` |
+| Web pages | `https://api.brin.sh/page/<domain/path>` |
+| GitHub repos | `https://api.brin.sh/repo/<owner/repo>` |
+| MCP servers | `https://api.brin.sh/mcp/<owner/repo>` |
+| Agent skills | `https://api.brin.sh/skill/<owner/repo>` |
+
+### Quick Check via Headers
+
+For fast checks, read the response headers:
+
+- `x-brin-verdict` — `safe`, `caution`, `suspicious`, or `malicious`
+- `x-brin-score` — 0–100 (higher is safer)
+
+### Interpreting Results
+
+| Verdict | Action |
+|---------|--------|
+| `safe` | Proceed normally |
+| `caution` | Warn the user, proceed if they confirm |
+| `suspicious` | Strongly advise against using. Block unless user explicitly overrides |
+| `malicious` / `dangerous` | Block entirely. Do not install or use |
+
+## Sub-scores
+
+The API returns four sub-score dimensions:
+
+- **identity** — publisher reputation, domain age, ownership signals
+- **behavior** — runtime behavior, network calls, install scripts
+- **content** — source code, prompt content, instruction analysis
+- **graph** — dependency graph, transitive risk, maintainer overlap
+
+When a score is low in any dimension, mention the specific risk area to the user.
+
+## Threats Detected
+
+brin detects the following threat categories:
+
+- Prompt injection and instruction override
+- Credential harvesting and data exfiltration
+- Typosquatting and impersonation
+- Install-time attacks and obfuscated payloads
+- Tool shadowing in MCP servers
+- Agent config manipulation
+- Supply chain attacks

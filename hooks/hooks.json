@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "hooks": {
+    "beforeShellExecution": [
+      {
+        "command": "./scripts/brin-check.sh",
+        "timeout": 30,
+        "matcher": "npm install|npm add|npm i |npx |yarn add|yarn install|pnpm add|pnpm install|pnpm i |bun add|bun install|bun i |pip install|pip3 install|uv pip install|uv add|cargo add|cargo install|gem install|go get |go install"
+      }
+    ]
+  }
+}
