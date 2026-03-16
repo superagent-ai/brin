@@ -27,6 +27,64 @@ this dataset contains open-source threat scan records from brin's scoring pipeli
 
 - **docs:** [brin.sh/docs](https://brin.sh/docs)
 - **cli:** [brin-cli](https://github.com/superagent-ai/brin-cli)
+- **cursor plugin:** included in this repo (see [cursor plugin](#cursor-plugin) below)
+
+---
+
+## cursor plugin
+
+this repo includes a [cursor plugin](https://cursor.com/docs/reference/plugins) that integrates brin's security scanning directly into your cursor workflow.
+
+### what it does
+
+- **pre-install hook** — automatically scans packages before `npm install`, `pip install`, `cargo add`, and other package manager commands. blocks `suspicious` or `malicious` packages and warns on `caution` verdicts.
+- **brin-check skill** — invoke with `/brin-check` in agent chat to scan any package, repo, MCP server, domain, or skill on demand.
+- **brin-scan command** — invoke with `/brin-scan <resource>` for a quick security check (e.g. `/brin-scan express`, `/brin-scan pypi:requests`).
+- **security rules** — teaches the AI agent to always consider brin scores when suggesting dependencies or external resources.
+
+### install
+
+install the plugin from the cursor marketplace, or add it manually:
+
+1. clone this repo into your cursor plugins directory, or
+2. copy the plugin files into your project:
+
+```
+.cursor-plugin/plugin.json   # plugin manifest
+hooks/hooks.json              # hook configuration
+scripts/brin-check.sh         # pre-install check script
+rules/brin-security.mdc       # AI agent security rules
+skills/brin-check/SKILL.md    # brin scanning skill
+commands/brin-scan.md         # brin scan command
+```
+
+3. make the hook script executable:
+
+```bash
+chmod +x scripts/brin-check.sh
+```
+
+4. restart cursor to load the plugin.
+
+### supported package managers
+
+| manager | commands matched |
+|---------|-----------------|
+| npm | `npm install`, `npm add`, `npm i`, `npx` |
+| yarn | `yarn add`, `yarn install` |
+| pnpm | `pnpm add`, `pnpm install`, `pnpm i` |
+| bun | `bun add`, `bun install`, `bun i` |
+| pip | `pip install`, `pip3 install`, `uv pip install`, `uv add` |
+| cargo | `cargo add`, `cargo install` |
+| gem | `gem install` |
+| go | `go get`, `go install` |
+
+### usage
+
+the pre-install hook runs automatically. for manual scans, use:
+
+- `/brin-check` — full security analysis with sub-scores and threat details
+- `/brin-scan <resource>` — quick scan of a specific resource
 
 ---
 
