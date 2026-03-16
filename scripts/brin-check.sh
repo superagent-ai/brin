@@ -71,24 +71,6 @@ detect_origin_and_packages() {
       grep -v '^$' | \
       sed 's/@.*//' | \
       head -20))
-  elif echo "$cmd" | grep -qE 'gem install'; then
-    origin="gem"
-    packages=($(echo "$cmd" | grep -oE 'gem install\s+.*' | \
-      sed 's/^gem install\s*//' | \
-      tr ' ' '\n' | \
-      grep -v '^-' | \
-      grep -v '^$' | \
-      head -20))
-  elif echo "$cmd" | grep -qE '(go get |go install)'; then
-    origin="repo"
-    packages=($(echo "$cmd" | grep -oE '(go get|go install)\s+.*' | \
-      sed -E 's/^(go get|go install)\s+//' | \
-      tr ' ' '\n' | \
-      grep -v '^-' | \
-      grep -v '^$' | \
-      sed 's|^github.com/||' | \
-      sed 's/@.*//' | \
-      head -20))
   fi
 
   echo "$origin"

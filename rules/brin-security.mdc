@@ -9,7 +9,7 @@ Before installing any package, dependency, or external resource — and before t
 
 ## When to Check
 
-- Before running any package install command (npm, pip, cargo, yarn, pnpm, bun, gem, go get)
+- Before running any package install command (npm, pip, cargo, yarn, pnpm, bun)
 - Before adding a new MCP server
 - Before using a new agent skill from an external source
 - Before fetching content from untrusted URLs or domains

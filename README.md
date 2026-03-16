@@ -72,16 +72,11 @@ chmod +x scripts/brin-check.sh scripts/brin-url-check.sh scripts/brin-web-check.
 
 ### supported package managers
 
-| manager | commands matched |
-|---------|-----------------|
-| npm | `npm install`, `npm add`, `npm i`, `npx` |
-| yarn | `yarn add`, `yarn install` |
-| pnpm | `pnpm add`, `pnpm install`, `pnpm i` |
-| bun | `bun add`, `bun install`, `bun i` |
-| pip | `pip install`, `pip3 install`, `uv pip install`, `uv add` |
-| cargo | `cargo add`, `cargo install` |
-| gem | `gem install` |
-| go | `go get`, `go install` |
+| registry | package managers matched |
+|----------|------------------------|
+| npm | `npm install`, `npm add`, `npm i`, `npx`, `yarn add`, `yarn install`, `pnpm add`, `pnpm install`, `pnpm i`, `bun add`, `bun install`, `bun i` |
+| pypi | `pip install`, `pip3 install`, `uv pip install`, `uv add` |
+| crate | `cargo add`, `cargo install` |
 
 ### web and url scanning
 
