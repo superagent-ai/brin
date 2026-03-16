@@ -100,14 +100,7 @@ check_package() {
   fi
 
   case "$verdict" in
-    dangerous|malicious)
-      echo "BLOCKED"
-      echo "$package"
-      echo "$verdict"
-      echo "$score"
-      return 1
-      ;;
-    suspicious)
+    malicious|suspicious)
       echo "BLOCKED"
       echo "$package"
       echo "$verdict"

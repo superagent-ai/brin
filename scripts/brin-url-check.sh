@@ -47,14 +47,7 @@ check_domain() {
   fi
 
   case "$verdict" in
-    dangerous|malicious)
-      echo "BLOCKED"
-      echo "$domain"
-      echo "$verdict"
-      echo "$score"
-      return 1
-      ;;
-    suspicious)
+    malicious|suspicious)
       echo "BLOCKED"
       echo "$domain"
       echo "$verdict"

@@ -34,12 +34,28 @@ Make a GET request to the brin API. No authentication is required.
 | MCP servers | `https://api.brin.sh/mcp/<owner/repo>` |
 | Agent skills | `https://api.brin.sh/skill/<owner/repo>` |
 
-### Quick Check via Headers
+### Response Format
 
-For fast checks, read the response headers:
+The API returns JSON:
+
+```json
+{
+  "origin": "npm",
+  "name": "express",
+  "score": 84,
+  "confidence": "medium",
+  "verdict": "safe",
+  "tolerance": "conservative",
+  "scanned_at": "2026-03-09T11:58:04.124413Z",
+  "url": "https://api.brin.sh/npm/express"
+}
+```
+
+Response headers also provide quick access:
 
 - `x-brin-verdict` — `safe`, `caution`, `suspicious`, or `malicious`
 - `x-brin-score` — 0–100 (higher is safer)
+- `x-brin-confidence` — `low`, `medium`, or `high`
 
 ### Interpreting Results
 
@@ -48,18 +64,7 @@ For fast checks, read the response headers:
 | `safe` | Proceed normally |
 | `caution` | Warn the user, proceed if they confirm |
 | `suspicious` | Strongly advise against using. Block unless user explicitly overrides |
-| `malicious` / `dangerous` | Block entirely. Do not install or use |
-
-## Sub-scores
-
-The API returns four sub-score dimensions:
-
-- **identity** — publisher reputation, domain age, ownership signals
-- **behavior** — runtime behavior, network calls, install scripts
-- **content** — source code, prompt content, instruction analysis
-- **graph** — dependency graph, transitive risk, maintainer overlap
-
-When a score is low in any dimension, mention the specific risk area to the user.
+| `malicious` | Block entirely. Do not install or use |
 
 ## Web Search and URL Safety
 

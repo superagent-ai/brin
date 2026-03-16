@@ -20,13 +20,13 @@ When the user asks to check or scan a resource, when you need to verify the safe
 The brin API requires no authentication. Make a GET request to:
 
 ```
-https://api.brin.sh/<origin>/<identifier>
+https://api.brin.sh/<origin>/<name>
 ```
 
 ### Supported Origins
 
-| Origin | Identifier | Example |
-|--------|-----------|---------|
+| Origin | Name | Example |
+|--------|------|---------|
 | `npm` | package name | `https://api.brin.sh/npm/express` |
 | `pypi` | package name | `https://api.brin.sh/pypi/requests` |
 | `crate` | crate name | `https://api.brin.sh/crate/serde` |
@@ -42,16 +42,16 @@ The API returns JSON with these fields:
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `origin` | string | Source type |
-| `identifier` | string | Resource identifier |
+| `origin` | string | Source type (e.g. `npm`, `pypi`, `domain`) |
+| `name` | string | Resource name |
 | `score` | integer | 0–100 safety score (higher is safer) |
 | `confidence` | string | `low`, `medium`, or `high` |
 | `verdict` | string | `safe`, `caution`, `suspicious`, or `malicious` |
-| `sub_scores` | object | Breakdown: `identity`, `behavior`, `content`, `graph` |
-| `threats` | array | Detected threat signals (if any) |
+| `tolerance` | string | Scan tolerance level |
 | `scanned_at` | string | ISO 8601 timestamp |
+| `url` | string | API endpoint URL for this resource |
 
-Response headers also include `x-brin-verdict` and `x-brin-score` for lightweight checks.
+Response headers also provide quick access: `x-brin-verdict`, `x-brin-score`, and `x-brin-confidence`.
 
 ## Step-by-Step
 
@@ -80,8 +80,7 @@ Report the following to the user:
 
 - **Verdict**: The overall safety assessment
 - **Score**: The numerical score (0–100)
-- **Sub-scores**: Break down which dimensions are strong or weak
-- **Threats**: List any specific threats detected with their descriptions
+- **Confidence**: How confident brin is in the result
 
 ### 4. Recommend action
 
@@ -99,31 +98,31 @@ When reporting results, format them clearly:
 ```
 brin scan: express (npm)
 ━━━━━━━━━━━━━━━━━━━━━━━━
-Score:    81/100
-Verdict:  safe ✓
+Score:      84/100
+Verdict:    safe ✓
 Confidence: medium
-
-Sub-scores:
-  Identity: 95  Behavior: 40  Content: 100  Graph: 30
-
-No threats detected.
 ```
 
-For dangerous packages:
+For a caution result:
+
+```
+brin scan: requests (pypi)
+━━━━━━━━━━━━━━━━━━━━━━━━
+Score:      65/100
+Verdict:    caution ⚠
+Confidence: medium
+```
+
+For a malicious resource:
 
 ```
 brin scan: malicious-pkg (npm)
 ━━━━━━━━━━━━━━━━━━━━━━━━
-Score:    12/100
-Verdict:  malicious ✗
+Score:      12/100
+Verdict:    malicious ✗
 Confidence: high
 
-Sub-scores:
-  Identity: 5  Behavior: 10  Content: 15  Graph: 18
-
-Threats:
-  • credential harvesting — Attempts to read and exfiltrate environment variables
-  • obfuscated payload — Contains Base64-encoded execution logic
+⚠ Do NOT install this package.
 ```
 
 ## Batch Scanning
@@ -133,10 +132,10 @@ When multiple packages are being installed, scan each one individually and provi
 ```
 brin scan summary
 ━━━━━━━━━━━━━━━━━━━━━━━━
-Package        Score  Verdict
-express        81     safe ✓
-lodash         88     safe ✓
-sketchy-lib    23     suspicious ⚠
+Package     Score  Verdict
+express     84     safe ✓
+lodash      88     safe ✓
+requests    65     caution ⚠
 ```
 
 ## Web Search and URL Scanning
@@ -160,14 +159,9 @@ curl -s https://api.brin.sh/page/example.com/docs/guide
 ```
 brin scan: example.com (domain)
 ━━━━━━━━━━━━━━━━━━━━━━━━
-Score:    92/100
-Verdict:  safe ✓
+Score:      90/100
+Verdict:    safe ✓
 Confidence: high
-
-Sub-scores:
-  Identity: 95  Behavior: 90  Content: 95  Graph: 88
-
-No threats detected.
 ```
 
 For a dangerous domain:
@@ -175,17 +169,11 @@ For a dangerous domain:
 ```
 brin scan: malicious-site.xyz (domain)
 ━━━━━━━━━━━━━━━━━━━━━━━━
-Score:    8/100
-Verdict:  malicious ✗
+Score:      8/100
+Verdict:    malicious ✗
 Confidence: high
 
-Sub-scores:
-  Identity: 5  Behavior: 3  Content: 10  Graph: 15
-
-Threats:
-  • prompt injection — Hidden instructions embedded in page content
-  • credential harvesting — Login form mimicking a legitimate service
-  • cloaking — Different content served to bots vs. browsers
+⚠ Do NOT visit this domain.
 ```
 
 ### When to scan URLs

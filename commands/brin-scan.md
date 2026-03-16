@@ -25,8 +25,7 @@ Replace `{identifier}` with the resource name.
 
 3. Parse the JSON response and report the results to the user, including:
    - The overall verdict and score
-   - Sub-score breakdown (identity, behavior, content, graph)
-   - Any detected threats with descriptions
+   - The confidence level
    - A clear recommendation on whether to proceed
 
 4. If the verdict is `suspicious` or `malicious`, strongly advise the user NOT to use the resource and suggest alternatives if possible.

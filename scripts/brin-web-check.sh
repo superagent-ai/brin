@@ -78,7 +78,7 @@ while IFS= read -r domain; do
   d_score=$(echo "$result" | cut -d'|' -f3)
 
   case "$d_verdict" in
-    dangerous|malicious|suspicious)
+    malicious|suspicious)
       dangerous+=("${d_name} (verdict: ${d_verdict}, score: ${d_score})")
       ;;
     caution)
