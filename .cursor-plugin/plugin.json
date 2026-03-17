@@ -1,0 +1,24 @@
+{
+  "name": "brin",
+  "description": "Security scoring for AI agent context — scan packages, repos, MCP servers, skills, and URLs via the brin API before your agent acts.",
+  "version": "1.0.0",
+  "author": "superagent",
+  "homepage": "https://brin.sh",
+  "repository": "https://github.com/superagent-ai/brin",
+  "license": "MIT",
+  "keywords": [
+    "security",
+    "safety",
+    "scanning",
+    "packages",
+    "mcp",
+    "supply-chain",
+    "prompt-injection",
+    "malware"
+  ],
+  "logo": "assets/logo.png",
+  "rules": "rules/",
+  "skills": "skills/",
+  "commands": "commands/",
+  "hooks": "hooks/hooks.json"
+}
