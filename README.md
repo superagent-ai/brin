@@ -49,21 +49,22 @@ this repo includes a [cursor plugin](https://cursor.com/docs/reference/plugins) 
 install the plugin from the cursor marketplace, or add it manually:
 
 1. clone this repo into your cursor plugins directory, or
-2. copy the plugin files into your project:
+2. copy the `plugins/cursor` directory into your project:
 
 ```
-.cursor-plugin/plugin.json    # plugin manifest
-hooks/hooks.json               # hook configuration
-scripts/brin-check.sh          # brin security check (all hooks)
-rules/brin-security.mdc       # AI agent security rules
-skills/brin-check/SKILL.md    # brin scanning skill
-commands/brin-scan.md          # brin scan command
+plugins/cursor/
+  .cursor-plugin/plugin.json    # plugin manifest
+  hooks/hooks.json               # hook configuration
+  scripts/brin-check.sh          # brin security check (all hooks)
+  rules/brin-security.mdc       # AI agent security rules
+  skills/brin-check/SKILL.md    # brin scanning skill
+  commands/brin-scan.md          # brin scan command
 ```
 
 3. make the hook script executable:
 
 ```bash
-chmod +x scripts/brin-check.sh
+chmod +x plugins/cursor/scripts/brin-check.sh
 ```
 
 4. restart cursor to load the plugin.
