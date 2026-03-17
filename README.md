@@ -54,18 +54,16 @@ install the plugin from the cursor marketplace, or add it manually:
 ```
 .cursor-plugin/plugin.json    # plugin manifest
 hooks/hooks.json               # hook configuration
-scripts/brin-check.sh          # pre-install security check
-scripts/brin-url-check.sh     # url/domain security check
-scripts/brin-web-check.sh     # web search result scanning
+scripts/brin-check.sh          # brin security check (all hooks)
 rules/brin-security.mdc       # AI agent security rules
 skills/brin-check/SKILL.md    # brin scanning skill
 commands/brin-scan.md          # brin scan command
 ```
 
-3. make the hook scripts executable:
+3. make the hook script executable:
 
 ```bash
-chmod +x scripts/brin-check.sh scripts/brin-url-check.sh scripts/brin-web-check.sh
+chmod +x scripts/brin-check.sh
 ```
 
 4. restart cursor to load the plugin.
