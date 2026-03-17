@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -uo pipefail
 
 BRIN_API="https://api.brin.sh"
 BRIN_TIMEOUT=10
@@ -21,8 +21,8 @@ check_brin() {
   response=$(curl -s -m "$BRIN_TIMEOUT" -D - -o /dev/null "${BRIN_API}/${origin}/${name}" 2>/dev/null) || return 0
 
   local verdict score
-  verdict=$(echo "$response" | grep -i 'x-brin-verdict' | tr -d '\r' | awk '{print $2}')
-  score=$(echo "$response" | grep -i 'x-brin-score' | tr -d '\r' | awk '{print $2}')
+  verdict=$(echo "$response" | grep -i 'x-brin-verdict' | tr -d '\r' | awk '{print $2}') || true
+  score=$(echo "$response" | grep -i 'x-brin-score' | tr -d '\r' | awk '{print $2}') || true
 
   [ -z "$verdict" ] && return 0
 
@@ -38,32 +38,38 @@ extract_packages() {
     origin="npm"
     packages=$(echo "$cmd" | grep -oE '(npm install|npm add|npm i|npx)\s+.*' | \
       sed -E 's/^(npm install|npm add|npm i|npx)\s+//' | \
-      tr ' ' '\n' | grep -v '^-' | grep -v '^$' | sed 's/@[^/]*$//' | head -20)
+      tr ' ' '\n' | { grep -v '^-' || true; } | { grep -v '^$' || true; } | \
+      sed 's/@[^/]*$//' | head -20)
   elif echo "$cmd" | grep -qE '(yarn add)'; then
     origin="npm"
     packages=$(echo "$cmd" | grep -oE 'yarn add\s+.*' | \
       sed 's/^yarn add\s*//' | \
-      tr ' ' '\n' | grep -v '^-' | grep -v '^$' | sed 's/@[^/]*$//' | head -20)
+      tr ' ' '\n' | { grep -v '^-' || true; } | { grep -v '^$' || true; } | \
+      sed 's/@[^/]*$//' | head -20)
   elif echo "$cmd" | grep -qE '(pnpm add|pnpm i )'; then
     origin="npm"
     packages=$(echo "$cmd" | grep -oE '(pnpm add|pnpm i)\s+.*' | \
       sed -E 's/^(pnpm add|pnpm i)\s+//' | \
-      tr ' ' '\n' | grep -v '^-' | grep -v '^$' | sed 's/@[^/]*$//' | head -20)
+      tr ' ' '\n' | { grep -v '^-' || true; } | { grep -v '^$' || true; } | \
+      sed 's/@[^/]*$//' | head -20)
   elif echo "$cmd" | grep -qE '(bun add|bun i )'; then
     origin="npm"
     packages=$(echo "$cmd" | grep -oE '(bun add|bun i)\s+.*' | \
       sed -E 's/^(bun add|bun i)\s+//' | \
-      tr ' ' '\n' | grep -v '^-' | grep -v '^$' | sed 's/@[^/]*$//' | head -20)
+      tr ' ' '\n' | { grep -v '^-' || true; } | { grep -v '^$' || true; } | \
+      sed 's/@[^/]*$//' | head -20)
   elif echo "$cmd" | grep -qE '(pip install|pip3 install|uv pip install|uv add)'; then
     origin="pypi"
     packages=$(echo "$cmd" | grep -oE '(pip3? install|uv pip install|uv add)\s+.*' | \
       sed -E 's/^(pip3? install|uv pip install|uv add)\s+//' | \
-      tr ' ' '\n' | grep -v '^-' | grep -v '^$' | grep -v '/' | sed 's/[>=<~!].*//' | head -20)
+      tr ' ' '\n' | { grep -v '^-' || true; } | { grep -v '^$' || true; } | \
+      { grep -v '/' || true; } | sed 's/[>=<~!].*//' | head -20)
   elif echo "$cmd" | grep -qE '(cargo add|cargo install)'; then
     origin="crate"
     packages=$(echo "$cmd" | grep -oE '(cargo add|cargo install)\s+.*' | \
       sed -E 's/^(cargo add|cargo install)\s+//' | \
-      tr ' ' '\n' | grep -v '^-' | grep -v '^$' | sed 's/@.*//' | head -20)
+      tr ' ' '\n' | { grep -v '^-' || true; } | { grep -v '^$' || true; } | \
+      sed 's/@.*//' | head -20)
   fi
 
   echo "$origin"
@@ -73,19 +79,17 @@ extract_packages() {
 extract_domains() {
   local text="$1"
   echo "$text" | \
-    grep -oE 'https?://[^/"'"'"'[:space:]>)]+' | \
+    { grep -oE 'https?://[^/"'"'"'[:space:]>)]+' || true; } | \
     sed -E 's|^https?://||' | sed 's|/.*||' | sed 's|:.*||' | \
-    grep -v '^$' | \
-    grep -v '^\(localhost\|127\.0\.0\.1\|0\.0\.0\.0\|::1\)$' | \
-    grep -v '^api\.brin\.sh$' | \
+    { grep -v '^$' || true; } | \
+    { grep -vE '^(localhost|127\.0\.0\.1|0\.0\.0\.0|::1|api\.brin\.sh)$' || true; } | \
     sort -u | head -10
 }
 
 handle_shell() {
   [ -z "$command" ] && exit 0
 
-  local origin packages
-  local result
+  local result origin packages
   result=$(extract_packages "$command")
   origin=$(echo "$result" | head -1)
   packages=$(echo "$result" | tail -n +2)
@@ -149,7 +153,7 @@ handle_web_search() {
   fi
 
   local content
-  content=$(echo "$input" | jq -r '.content // .input // .parameters // empty' 2>/dev/null)
+  content=$(echo "$input" | jq -r '.content // .input // .parameters // empty' 2>/dev/null) || true
   [ -z "$content" ] && exit 0
 
   local domains
