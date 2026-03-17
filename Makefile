@@ -1,4 +1,4 @@
 .PHONY: test
 
 test:
-	@bash scripts/brin-check.test.sh
+	@cd plugins/cursor && bash scripts/brin-check.test.sh
