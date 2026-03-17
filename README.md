@@ -87,11 +87,21 @@ the plugin also protects against malicious web content:
 
 brin detects prompt injection, phishing, cloaking, credential harvesting, and exfiltration hidden in web pages.
 
+### testing
+
+the plugin includes a test suite that runs against the live brin API:
+
+```bash
+make test
+```
+
+requires `bash`, `curl`, and `jq`.
+
 ### usage
 
 the hooks run automatically. for manual scans, use:
 
-- `/brin-check` — full security analysis with sub-scores and threat details
+- `/brin-check` — full security analysis with scores and confidence
 - `/brin-scan <resource>` — quick scan of a specific resource (packages, domains, URLs, repos, etc.)
 
 ---
